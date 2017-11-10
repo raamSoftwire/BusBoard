@@ -44,5 +44,11 @@ rp(postcodeRequestString, (error, response, body) => body)
     .then(makeBusStopRequestString)
     .then((string) => rp(string, (error, response, body) => body))
     .then(makeBusTimesRequestStrings)
+    .then((strings) => Promise.all([rp(strings[0]), rp(string[1])]))
     .then();
 console.log('here');
+
+// getCoordinatesForPostcode(postcode)
+//     .then(coordinates => getBusStopsForCoordinates(coordinates))
+//     .then(busStops => Promise.all(busStops.map(busStop => getArrivalsForBusStop(busStop))))
+//     .then(arrivals => console.log(arrivals)); // this looks bad
