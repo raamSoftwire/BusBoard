@@ -1,52 +1,60 @@
 const request = require('request');
 const readlineSync = require('readline-sync');
 const moment = require('moment');
+const busHelper = require('./busHelper')
+
 
 const stopCode = '490008660N';
-const requestString = 'https://api.tfl.gov.uk/StopPoint/' + stopCode + '/Arrivals';
 
+const postcode = readlineSync.question('Please enter a postcode : ');
+const postcodeRequestString = 'https://api.postcodes.io/postcodes/' + postcode;
 
-function getArrivalTime(obj)
-{
-    const unixTime = moment(obj.expectedArrival,"YYYY-MM-DDTHH:mm:ssZ",'en').valueOf();
-    return unixTime;
-
+function initialise() {
+    request(postcodeRequestString, postcodeResponseHandler);
 }
 
-function getTimeTilArrival(obj)
+function postcodeResponseHandler(error, response, body)
 {
-    const now = moment();
-    const expArr = moment(obj.expectedArrival,"YYYY-MM-DDTHH:mm:ssZ",'en');
-    const timeTilArrival = moment(expArr.diff(now)).format("HH:mm");
-    return timeTilArrival;
-
+    obj = JSON.parse(body)
+    const lat = obj.result.latitude;
+    const lon = obj.result.longitude;
+    console.log(lat, lon)
 }
 
-function displayBusTimes(obj)
-{
-    const expArr = moment(obj.expectedArrival,"YYYY-MM-DDTHH:mm:ssZ",'en');
-    const lineName = obj.lineName;
-    const destName = obj.destinationName;
-    const timeTilArrival = getTimeTilArrival(obj);
 
-    console.log(lineName + " towards " + destName + " arriving at "
-        + moment(expArr).format("HH:mm") + " " + timeTilArrival);
-}
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+requestString = 'https://api.tfl.gov.uk/StopPoint/' + stopCode
+    + '/Arrivals?app_id=72ae2528&app_key=e51178ced390783e1bc24c32fe85b8d1';
+
+request(requestString, responseHandler);
+
 
 function responseHandler (error, response, body)
 {
     const data = JSON.parse(body);
     data.sort(function(a,b){
-        return getArrivalTime(a) - getArrivalTime(b)
+        return busHelper.getArrivalTime(a) - busHelper.getArrivalTime(b)
     });
 
     for(i = 0; i < 5; i++)
     {
-        displayBusTimes(data[i]);
+        busHelper.displayBusTimes(data[i]);
     }
 
 }
 
-request(requestString, responseHandler);
-
-// moment(date,["DD/MM/YYYY","YYYY-MM-DD"],'en').format("DD/MM/YYYY");
+initialise();
