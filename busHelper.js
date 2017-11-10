@@ -22,8 +22,10 @@ function displayBusTimes(obj)
     const lineName = obj.lineName;
     const destName = obj.destinationName;
     const timeTilArrival = getTimeTilArrival(obj);
+    const stationName = obj.stationName;
 
     console.log(
+
         moment(expArr).format("HH:mm") + "\t" +
         lineName + " towards " + destName + " arriving "
         + timeTilArrival);
