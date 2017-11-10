@@ -1,7 +1,8 @@
 const request = require('request');
 const readlineSync = require('readline-sync');
 const moment = require('moment');
-const busHelper = require('./busHelper')
+const busHelper = require('./busHelper');
+const rp = require('request-promise-native');
 
 
 const postcode = readlineSync.question('Please enter a postcode : ');
@@ -60,3 +61,25 @@ function responseHandler (error, response, body)
 }
 
 initialise();
+
+
+
+
+var p = new Promise(function(resolve, reject) {
+    if (/* condition */) {
+        resolve(/* value */);  // fulfilled successfully
+    }
+    else {
+        reject(/* reason */);  // error, rejected
+    }
+});
+
+
+var fetchJSON = function(url) {
+    return new Promise((resolve, reject) => {
+        $.getJSON(url)
+            .done((json) => resolve(json))
+            .fail((xhr, status, err) => reject(status + err.message));
+    });
+}
+
