@@ -18,7 +18,7 @@ function getCoordinatesFromPostcode(postcodeString)
 function getBusStopIDsFromCoordinates(coordinates)
 {
     busStopRequestString = 'https://api.tfl.gov.uk/StopPoint?stopTypes=%20NaptanPublicBusCoachTram' +
-        '&radius=400&useStopPointHierarchy=false&modes=bus&returnLines=false&lat='
+        '&radius=1000&useStopPointHierarchy=false&modes=bus&returnLines=false&lat='
         + coordinates[0] +'&lon=' + coordinates[1];
     return rp(busStopRequestString)
         .then(JSON.parse)
@@ -37,7 +37,10 @@ function getJSON(postcode)
         .then(BusStopIds => Promise.all(BusStopIds.map(busHelper.getBusData)))
 }
 
+app.use(express.static('frontend'));
+
 app.listen(3000);
 app.get('/departureBoards',
     (req, res) => getJSON(req.query.postcode)
-        .then(JSONdata => res.send(JSONdata)));
+        .then(JSONdata => res.send(JSONdata))
+        .catch(error => res.status(error.statusCode).send(error.message)));
