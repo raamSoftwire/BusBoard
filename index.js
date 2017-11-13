@@ -4,16 +4,6 @@ const rp = require('request-promise-native');
 const express = require('express');
 const app = express();
 
-const postcode = 'NW5 1TL';//readlineSync.question('Please enter a postcode : ');
-
-
-//app.get('/departureBoards', (req, res) => res.send(getJSON(req.query.postcode)));
-
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
-
-
-
-
 
 function getCoordinatesFromPostcode(postcodeString)
 {
@@ -40,15 +30,14 @@ function getBusStopIDsFromCoordinates(coordinates)
 }
 
 
+function getJSON(postcode)
+{
+    return getCoordinatesFromPostcode(postcode)
+        .then(coordinates => getBusStopIDsFromCoordinates(coordinates))
+        .then(BusStopIds => Promise.all(BusStopIds.map(busHelper.getBusData)))
+}
 
-getCoordinatesFromPostcode(postcode)
-    .then(coordinates => getBusStopIDsFromCoordinates(coordinates))
-    .then(BusStopIds => Promise.all(BusStopIds.map(busHelper.getBusData)))
-    .then(RESULT => app.get('/departureBoards', (req, res) => res.send(RESULT)))
-
-
-// getCoordinatesFromPostcode(postcode)
-//     .then(coordinates => getBusStopIDsFromCoordinates(coordinates))
-//     .then(BusStopIds => Promise.all(BusStopIds.map(busHelper.getBusData)))
-//     .then(busData => busData.map(busHelper.displayBusData));
-
+app.listen(3000);
+app.get('/departureBoards',
+    (req, res) => getJSON(req.query.postcode)
+        .then(JSONdata => res.send(JSONdata)));
