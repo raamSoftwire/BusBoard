@@ -63,23 +63,12 @@ function responseHandler (error, response, body)
 initialise();
 
 
+// getCoordinatesForPostcode(postcode)
+//     .then(coordinates => getBusStopsForCoordinates(coordinates))
+//     .then(busStops => Promise.all(busStops.map(busStop => getArrivalsForBusStop(busStop))))
+//     .then(arrivals => console.log(arrivals)); // this looks bad
 
 
-var p = new Promise(function(resolve, reject) {
-    if (/* condition */) {
-        resolve(/* value */);  // fulfilled successfully
-    }
-    else {
-        reject(/* reason */);  // error, rejected
-    }
-});
 
 
-var fetchJSON = function(url) {
-    return new Promise((resolve, reject) => {
-        $.getJSON(url)
-            .done((json) => resolve(json))
-            .fail((xhr, status, err) => reject(status + err.message));
-    });
-}
 
