@@ -7,7 +7,7 @@ const app = express();
 const postcode = 'NW5 1TL';//readlineSync.question('Please enter a postcode : ');
 
 
-app.get('/departureBoards', (req, res) => res.send('Hello World Rowan!'))
+//app.get('/departureBoards', (req, res) => res.send(getJSON(req.query.postcode)));
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
 
@@ -40,11 +40,15 @@ function getBusStopIDsFromCoordinates(coordinates)
 }
 
 
+
 getCoordinatesFromPostcode(postcode)
     .then(coordinates => getBusStopIDsFromCoordinates(coordinates))
     .then(BusStopIds => Promise.all(BusStopIds.map(busHelper.getBusData)))
-    .then(busData => busData.map(busHelper.displayBusData));
+    .then(RESULT => app.get('/departureBoards', (req, res) => res.send(RESULT)))
 
-function () {
 
-}
+// getCoordinatesFromPostcode(postcode)
+//     .then(coordinates => getBusStopIDsFromCoordinates(coordinates))
+//     .then(BusStopIds => Promise.all(BusStopIds.map(busHelper.getBusData)))
+//     .then(busData => busData.map(busHelper.displayBusData));
+

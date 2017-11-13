@@ -65,7 +65,6 @@ function getBusData(stopId)
         .then(JSON.parse)
         .then(busDataArray => sortByArrivalTime(busDataArray))
         .then(busDataArray => busDataArray.slice(0,5))
-
 }
 
-module.exports = {sortByDistance, getBusData,displayBusData};
+module.exports = {sortByDistance, getBusData, displayBusData};
