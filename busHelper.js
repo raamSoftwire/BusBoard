@@ -6,7 +6,6 @@ function getArrivalTime(obj)
 {
     const unixTime = moment(obj.expectedArrival,"YYYY-MM-DDTHH:mm:ssZ",'en').valueOf();
     return unixTime;
-
 }
 
 function getTimeTilArrival(obj)
@@ -14,7 +13,28 @@ function getTimeTilArrival(obj)
     const expArr = moment(obj.expectedArrival,"YYYY-MM-DDTHH:mm:ssZ",'en');
     const timeTilArrival = expArr.fromNow();
     return timeTilArrival;
+}
 
+function sortByDistance(stopPoints)
+{
+    return stopPoints.sort(function(a,b)
+    {
+        return a.distance - b.distance;
+    })
+}
+
+function sortByArrivalTime(busDataArray)
+{
+    return busDataArray.sort(function(a,b)
+    {
+        return getArrivalTime(a) - getArrivalTime(b)
+    })
+}
+
+function makeStopDetailsRequestString(stopId)
+{
+    return 'https://api.tfl.gov.uk/StopPoint/' + stopId
+        + '/Arrivals?app_id=72ae2528&app_key=e51178ced390783e1bc24c32fe85b8d1';
 }
 
 function displayBusTimes(obj)
@@ -32,28 +52,6 @@ function displayBusTimes(obj)
         + timeTilArrival);
 }
 
-function sortByDistance(stopPoints)
-{
-    return stopPoints.sort(function(a,b)
-    {
-        return a.distance - b.distance;
-    })
-}
-
-function sortByArrivalTime(busDataArray) {
-
-    return busDataArray.sort(function(a,b)
-        {
-            return getArrivalTime(a) - getArrivalTime(b)
-        })
-}
-
-function makeStopDetailsRequestString(stopId)
-{
-    return 'https://api.tfl.gov.uk/StopPoint/' + stopId
-        + '/Arrivals?app_id=72ae2528&app_key=e51178ced390783e1bc24c32fe85b8d1';
-}
-
 function displayHelper(buses)
 {
     console.log('\n' + buses[0].stationName + "\n");
@@ -68,10 +66,6 @@ function displayBusData(stopId)
         .then(busDataArray => sortByArrivalTime(busDataArray))
         .then(busDataArray => busDataArray.slice(0,5))
         .then(displayHelper)
-
-
-
 }
 
-module.exports = {getArrivalTime, displayBusTimes, sortByDistance,
-    sortByArrivalTime, displayBusData};
+module.exports = {displayBusTimes, sortByDistance, displayBusData};
