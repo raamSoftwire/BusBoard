@@ -27,6 +27,17 @@ function makeUL(myArray) {
 }
 
 
+function displayBusData(obj)
+{
+    const expArr = moment(obj.expectedArrival,"YYYY-MM-DDTHH:mm:ssZ",'en');
+    const lineName = obj.lineName;
+    const destName = obj.destinationName;
+    const timeTilArrival = expArr.fromNow();
+    const stationName = obj.stationName;
+    return moment(expArr).format("HH:mm") + "\t" +
+        lineName + " towards " + destName + ", arriving "
+        + timeTilArrival
+}
 
 
 xhttp.onload = function() {
@@ -44,7 +55,7 @@ xhttp.onload = function() {
         stringArray = [];
         for(j =0; j<5; j++)
         {
-            str = "Time to Station " + obj[i][j].timeToStation + " seconds";
+            str = displayBusData(obj[i][j]);
             stringArray.push(str);
         }
 
