@@ -53,4 +53,4 @@ app.get('/departureBoards',
 
 app.get('/busArrivalsData',
     (req,res) => getJSON2(req.query.id)
-        .then(JSONdata => res.send(JSONdata)))
+        .then(JSONdata => res.send(JSONdata)));

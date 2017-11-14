@@ -35,26 +35,22 @@ function clear()
 }
 
 function makeUL(myArray, idArray) {
-    // Create the list element:
+
     const list = document.createElement('ul');
 
     for (let i = 0; i < myArray.length; i++) {
         // Create the list item:
         let item = document.createElement('li');
 
-
-        // Set its contents:
         nodeToAdd = document.createElement('a');
         nodeToAdd.textContent = (myArray[i]);
         nodeToAdd.href = '/busArrivals?id=' + idArray[i];
         item.appendChild(nodeToAdd);
 
-        // Add it to the list:
         list.appendChild(item);
     }
     return list;
 }
-
 
 function displayBusData(obj)
 {
@@ -110,11 +106,8 @@ xhttp.onload = function() {
             stringArray.push(str);
             idArray.push(obj[i][j].vehicleId);
         }
-
-
         stopList.appendChild(makeUL(stringArray, idArray));
     }
-
     console.log(xhttp.response);
 };
 
