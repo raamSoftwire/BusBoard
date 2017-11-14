@@ -1,8 +1,8 @@
-var xhttp = new XMLHttpRequest();
+const xhttp = new XMLHttpRequest();
 
 function getQuery(postcode)
 {
-    postcodeString = 'http://localhost:3000/departureBoards?postcode=' + postcode;
+    const postcodeString = 'http://localhost:3000/departureBoards?postcode=' + postcode;
     xhttp.open('GET', postcodeString, true);
     xhttp.setRequestHeader('Content-Type', 'application/json');
     xhttp.send();
@@ -10,12 +10,13 @@ function getQuery(postcode)
 
 
 
-
+let timer = 0;
 function functionOnClick(form)
 {
-    postcode = form.postcode.value;
+    const postcode = form.postcode.value;
     getQuery(postcode);
-    setInterval(getQuery, 10000, postcode);
+    clearInterval(timer);
+    timer = setInterval(getQuery, 10000, postcode);
 
 }
 
@@ -23,9 +24,9 @@ function clear()
 {
     document.getElementById('stopHeader0').innerHTML = '';
     document.getElementById('stopHeader1').innerHTML = '';
-    for(i=0; i<2; i++)
+    for(let i=0; i<2; i++)
     {
-        stopList = document.getElementById('stopList'+ i);
+        let stopList = document.getElementById('stopList'+ i);
 
         while ( stopList.hasChildNodes()) {
             stopList.removeChild(stopList.firstChild);
@@ -33,16 +34,20 @@ function clear()
     }
 }
 
-function makeUL(myArray) {
+function makeUL(myArray, idArray) {
     // Create the list element:
-    var list = document.createElement('ul');
+    const list = document.createElement('ul');
 
-    for (var i = 0; i < myArray.length; i++) {
+    for (let i = 0; i < myArray.length; i++) {
         // Create the list item:
-        var item = document.createElement('li');
+        let item = document.createElement('li');
+
 
         // Set its contents:
-        item.appendChild(document.createTextNode(myArray[i]));
+        nodeToAdd = document.createElement('a');
+        nodeToAdd.textContent = (myArray[i]);
+        nodeToAdd.href = '/busArrivals?id=' + idArray[i];
+        item.appendChild(nodeToAdd);
 
         // Add it to the list:
         list.appendChild(item);
@@ -83,33 +88,34 @@ xhttp.onload = function() {
     }
     if (obj.length === 0)
     {
-        document.getElementById('stopHeader0').innerHTML = 'Error: no bus stops found'
+        document.getElementById('stopHeader0').innerHTML = 'Error: no bus stops found';
         return
     }
     console.log(obj);
     document.getElementById('stopHeader0').innerHTML = obj[0][0].stationName;
     document.getElementById('stopHeader1').innerHTML = obj[1][0].stationName;
 
-    for(i in obj)
+    for(let i in obj)
     {
-        stopList = document.getElementById('stopList'+ i);
+        let stopList = document.getElementById('stopList'+ i);
 
         while ( stopList.hasChildNodes()) {
             stopList.removeChild(stopList.firstChild);
         }
-        stringArray = [];
-        for(j in obj[i])
+        let stringArray = [];
+        let idArray = [];
+        for(let j in obj[i])
         {
-            str = displayBusData(obj[i][j]);
+            let str = displayBusData(obj[i][j]);
             stringArray.push(str);
+            idArray.push(obj[i][j].vehicleId);
         }
 
 
-        stopList.appendChild(makeUL(stringArray));
+        stopList.appendChild(makeUL(stringArray, idArray));
     }
 
     console.log(xhttp.response);
-    // Handle response here using e.g. xhttp.status, xhttp.response, xhttp.responseText
 };
 
 

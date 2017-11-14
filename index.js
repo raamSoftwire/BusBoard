@@ -38,6 +38,7 @@ function getJSON(postcode)
 }
 
 app.use(express.static('frontend'));
+app.use('/busArrivals', express.static('busArrivals'));
 
 app.listen(3000);
 app.get('/departureBoards',
