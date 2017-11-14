@@ -37,6 +37,11 @@ function getJSON(postcode)
         .then(BusStopIds => Promise.all(BusStopIds.map(busHelper.getBusData)))
 }
 
+function getJSON2(vehicleId)
+{
+    return rp('https://api.tfl.gov.uk/Vehicle/' + vehicleId + '/Arrivals')
+}
+
 app.use(express.static('frontend'));
 app.use('/busArrivals', express.static('busArrivals'));
 
@@ -45,3 +50,7 @@ app.get('/departureBoards',
     (req, res) => getJSON(req.query.postcode)
         .then(JSONdata => res.send(JSONdata))
         .catch(error => res.status(error.statusCode).send(error.message)));
+
+app.get('/busArrivalsData',
+    (req,res) => getJSON2(req.query.id)
+        .then(JSONdata => res.send(JSONdata)))
