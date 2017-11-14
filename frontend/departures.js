@@ -1,13 +1,22 @@
 var xhttp = new XMLHttpRequest();
 
-function functionOnClick(form)
+function getQuery(postcode)
 {
-    postcode = form.postcode.value;
     postcodeString = 'http://localhost:3000/departureBoards?postcode=' + postcode;
     xhttp.open('GET', postcodeString, true);
     xhttp.setRequestHeader('Content-Type', 'application/json');
-    clear();
     xhttp.send();
+}
+
+
+
+
+function functionOnClick(form)
+{
+    postcode = form.postcode.value;
+    getQuery(postcode);
+    setInterval(getQuery, 10000, postcode);
+
 }
 
 function clear()
@@ -56,6 +65,7 @@ function displayBusData(obj)
 
 
 xhttp.onload = function() {
+    clear();
     try
     {
         obj = JSON.parse(xhttp.response);
@@ -71,7 +81,6 @@ xhttp.onload = function() {
             return
         }
     }
-    console.log(obj)
     if (obj.length === 0)
     {
         document.getElementById('stopHeader0').innerHTML = 'Error: no bus stops found'
