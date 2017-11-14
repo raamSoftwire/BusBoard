@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="refresh" content="30">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Softwire Bus Departure Board</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
@@ -22,19 +23,15 @@
             <p>Enter your postcode below to find the nearest two bus stops and the next five buses.</p>
 
             <form action="javascript:void(0)" onsubmit="functionOnClick(this)">
-                Postcode:<br>
-                <input type="text" name="postcode">
+                <input type="text" name="postcode" placeholder="Postcode">
                 <input type="submit" value="Submit">
             </form>
 
         </div>
 
     </div>
-    <div id="GIF" align="center">
 
-        <img width="50%" src="SickGIF.gif" align="center">
 
-    </div>
     <div class="container">
         <!-- Example row of columns -->
         <div class="row">
@@ -48,14 +45,22 @@
             </div>
         </div>
 
+        <div id="GIF" align="center">
+
+            <img width="50%" src="SickGIF.gif">
+
+        </div>
+
         <hr>
 
     </div> <!-- /container -->
 
+
+
 </main>
 
 <footer class="container">
-    <p>&copy; Company 2017</p>
+    <p>&copy; Rowan and Raam</p>
 </footer>
 </body>
 </html>

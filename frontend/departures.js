@@ -6,7 +6,22 @@ function functionOnClick(form)
     postcodeString = 'http://localhost:3000/departureBoards?postcode=' + postcode;
     xhttp.open('GET', postcodeString, true);
     xhttp.setRequestHeader('Content-Type', 'application/json');
+    clear();
     xhttp.send();
+}
+
+function clear()
+{
+    document.getElementById('stopHeader0').innerHTML = '';
+    document.getElementById('stopHeader1').innerHTML = '';
+    for(i=0; i<2; i++)
+    {
+        stopList = document.getElementById('stopList'+ i);
+
+        while ( stopList.hasChildNodes()) {
+            stopList.removeChild(stopList.firstChild);
+        }
+    }
 }
 
 function makeUL(myArray) {
@@ -34,18 +49,39 @@ function displayBusData(obj)
     const destName = obj.destinationName;
     const timeTilArrival = expArr.fromNow();
     const stationName = obj.stationName;
-    return moment(expArr).format("HH:mm") + "\t" +
-        lineName + " towards " + destName + ", arriving "
+    return moment(expArr).format("HH:mm")+ " " +
+        lineName + " to " + destName + ", "
         + timeTilArrival
 }
 
 
 xhttp.onload = function() {
-    obj = JSON.parse(xhttp.response);
+    try
+    {
+        obj = JSON.parse(xhttp.response);
+    }
+    catch (err)
+    {
+        if (xhttp.status === 404)
+        {
+            document.getElementById('stopHeader0').innerHTML = 'Error: invalid postcode'
+        }
+        else {
+            document.getElementById('stopHeader0').innerHTML = 'Unexpected error: ' + xhttp.status;
+            return
+        }
+    }
+    console.log(obj)
+    if (obj.length === 0)
+    {
+        document.getElementById('stopHeader0').innerHTML = 'Error: no bus stops found'
+        return
+    }
+    console.log(obj);
     document.getElementById('stopHeader0').innerHTML = obj[0][0].stationName;
     document.getElementById('stopHeader1').innerHTML = obj[1][0].stationName;
 
-    for(i=0; i<2; i++)
+    for(i in obj)
     {
         stopList = document.getElementById('stopList'+ i);
 
@@ -53,11 +89,12 @@ xhttp.onload = function() {
             stopList.removeChild(stopList.firstChild);
         }
         stringArray = [];
-        for(j =0; j<5; j++)
+        for(j in obj[i])
         {
             str = displayBusData(obj[i][j]);
             stringArray.push(str);
         }
+
 
         stopList.appendChild(makeUL(stringArray));
     }
